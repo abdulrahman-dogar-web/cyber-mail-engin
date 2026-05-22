@@ -227,11 +227,37 @@ body {
   letter-spacing: -0.3px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   color: #ffffff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   padding-bottom: 12px;
 }
+
+.card h3 .title-txt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- Micro Badge Counter Styles --- */
+.counter-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  color: #e5e7eb;
+  font-family: monospace;
+}
+
+.result-box h4 .counter-badge {
+  margin-left: auto;
+}
+
+.good h4 .counter-badge { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: var(--cyber-green); }
+.bad h4 .counter-badge { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: var(--cyber-red); }
+.dup h4 .counter-badge { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: var(--cyber-amber); }
 
 /* --- Inputs and Interaction Objects --- */
 .textarea-wrapper {
@@ -354,6 +380,7 @@ textarea:focus {
 }
 
 .result-box h4 {
+  width: 100%;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -720,13 +747,16 @@ textarea:focus {
       
       <!-- Left Config Frame -->
       <div class="card">
-        <h3><i class="fa-solid fa-shield-halved" style="color: var(--cyber-red)"></i> Bad Mails Repository</h3>
+        <h3>
+          <span class="title-txt"><i class="fa-solid fa-shield-halved" style="color: var(--cyber-red)"></i> Bad Mails Repository</span>
+          <span class="counter-badge" id="badInputCount">Lines: 0</span>
+        </h3>
         <div class="textarea-wrapper">
-          <textarea id="badInput" placeholder="Enter target strings or blacklisted addresses here..."></textarea>
+          <textarea id="badInput" placeholder="Enter target strings or blacklisted addresses here..." oninput="updateLineCount(this, 'badInputCount')"></textarea>
         </div>
         <div class="action-row">
           <button class="main-btn" onclick="saveBad()"><i class="fa-solid fa-floppy-disk"></i> Save Bad Mails</button>
-          <button class="clear-btn" onclick="document.getElementById('badInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+          <button class="clear-btn" onclick="document.getElementById('badInput').value=''; updateLineCount(document.getElementById('badInput'), 'badInputCount');"><i class="fa-solid fa-eraser"></i> Clear</button>
         </div>
         
         <div class="list-container" id="badList"></div>
@@ -736,32 +766,35 @@ textarea:focus {
 
       <!-- Right Processing Dashboard Frame -->
       <div class="card">
-        <h3><i class="fa-solid fa-microchip" style="color: var(--cyber-cyan)"></i> Core Engine Check</h3>
+        <h3>
+          <span class="title-txt"><i class="fa-solid fa-microchip" style="color: var(--cyber-cyan)"></i> Core Engine Check</span>
+          <span class="counter-badge" id="checkInputCount">Lines: 0</span>
+        </h3>
         <div class="textarea-wrapper">
-          <textarea id="checkInput" placeholder="Paste verification payload lists here..."></textarea>
+          <textarea id="checkInput" placeholder="Paste verification payload lists here..." oninput="updateLineCount(this, 'checkInputCount')"></textarea>
         </div>
         <div class="action-row">
           <button class="main-btn" onclick="analyze()"><i class="fa-solid fa-bolt"></i> ANALYZE NOW</button>
-          <button class="clear-btn" onclick="document.getElementById('checkInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+          <button class="clear-btn" onclick="document.getElementById('checkInput').value=''; updateLineCount(document.getElementById('checkInput'), 'checkInputCount');"><i class="fa-solid fa-eraser"></i> Clear</button>
         </div>
 
         <!-- Good Metric Output Box -->
         <div class="result-box good">
-          <h4><i class="fa-solid fa-circle-check"></i> GOOD MAILS</h4>
+          <h4><i class="fa-solid fa-circle-check"></i> GOOD MAILS <span class="counter-badge" id="goodCount">Total: 0</span></h4>
           <div class="list-container" id="goodList"></div>
           <button class="copy-btn" onclick="copy('goodList')"><i class="fa-solid fa-copy"></i> Copy Good</button>
         </div>
 
         <!-- Bad Metric Output Box -->
         <div class="result-box bad">
-          <h4><i class="fa-solid fa-circle-xmark"></i> BAD MAILS</h4>
+          <h4><i class="fa-solid fa-circle-xmark"></i> BAD MAILS <span class="counter-badge" id="badResultCount">Total: 0</span></h4>
           <div class="list-container" id="badResult"></div>
           <button class="copy-btn" onclick="copy('badResult')"><i class="fa-solid fa-copy"></i> Copy Bad</button>
         </div>
 
         <!-- Duplicated Metric Output Box -->
         <div class="result-box dup">
-          <h4><i class="fa-solid fa-triangle-exclamation"></i> DUPLICATES</h4>
+          <h4><i class="fa-solid fa-triangle-exclamation"></i> DUPLICATES <span class="counter-badge" id="dupCount">Total: 0</span></h4>
           <div class="list-container" id="dupList"></div>
           <button class="copy-btn" onclick="copy('dupList')"><i class="fa-solid fa-copy"></i> Copy Duplicates</button>
         </div>
@@ -779,23 +812,26 @@ textarea:focus {
     </div>
 
     <div class="card">
-      <h3><i class="fa-solid fa-filter" style="color: var(--cyber-amber)"></i> Duplicate Filter System</h3>
+      <h3>
+        <span class="title-txt"><i class="fa-solid fa-filter" style="color: var(--cyber-amber)"></i> Duplicate Filter System</span>
+        <span class="counter-badge" id="dupInputCount">Lines: 0</span>
+      </h3>
       <div class="textarea-wrapper">
-        <textarea id="dupInput" placeholder="Paste mail matrix array to filter redundancies..."></textarea>
+        <textarea id="dupInput" placeholder="Paste mail matrix array to filter redundancies..." oninput="updateLineCount(this, 'dupInputCount')"></textarea>
       </div>
       <div class="action-row">
         <button class="main-btn" onclick="removeDup()"><i class="fa-solid fa-filter-circle-xmark"></i> Remove Duplicates</button>
-        <button class="clear-btn" onclick="document.getElementById('dupInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+        <button class="clear-btn" onclick="document.getElementById('dupInput').value=''; updateLineCount(document.getElementById('dupInput'), 'dupInputCount');"><i class="fa-solid fa-eraser"></i> Clear</button>
       </div>
 
       <div class="result-box good">
-        <h4><i class="fa-solid fa-sparkles"></i> Unique Output</h4>
+        <h4><i class="fa-solid fa-sparkles"></i> Unique Output <span class="counter-badge" id="uniqueCount">Total: 0</span></h4>
         <div class="list-container" id="uniqueList"></div>
         <button class="copy-btn" onclick="copy('uniqueList')"><i class="fa-solid fa-copy"></i> Copy Unique</button>
       </div>
 
       <div class="result-box dup">
-        <h4><i class="fa-solid fa-trash"></i> Redundant Items Dropped</h4>
+        <h4><i class="fa-solid fa-trash"></i> Redundant Items Dropped <span class="counter-badge" id="removedCount">Total: 0</span></h4>
         <div class="list-container" id="removedList"></div>
         <button class="copy-btn" onclick="copy('removedList')"><i class="fa-solid fa-copy"></i> Copy Removed</button>
       </div>
@@ -811,17 +847,20 @@ textarea:focus {
     </div>
 
     <div class="card">
-      <h3><i class="fa-solid fa-box-open" style="color: var(--cyber-purple)"></i> Regex Pattern Extractor</h3>
+      <h3>
+        <span class="title-txt"><i class="fa-solid fa-box-open" style="color: var(--cyber-purple)"></i> Regex Pattern Extractor</span>
+        <span class="counter-badge" id="extInputCount">Lines: 0</span>
+      </h3>
       <div class="textarea-wrapper">
-        <textarea id="extInput" placeholder="Dump raw text strings or logs here to isolate target syntax patterns..."></textarea>
+        <textarea id="extInput" placeholder="Dump raw text strings or logs here to isolate target syntax patterns..." oninput="updateLineCount(this, 'extInputCount')"></textarea>
       </div>
       <div class="action-row">
         <button class="main-btn" onclick="extract()"><i class="fa-solid fa-arrow-down-9-1"></i> Extract Elements</button>
-        <button class="clear-btn" onclick="document.getElementById('extInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+        <button class="clear-btn" onclick="document.getElementById('extInput').value=''; updateLineCount(document.getElementById('extInput'), 'extInputCount');"><i class="fa-solid fa-eraser"></i> Clear</button>
       </div>
 
       <div class="result-box good">
-        <h4><i class="fa-solid fa-envelope-circle-check"></i> Isolated Gmail List</h4>
+        <h4><i class="fa-solid fa-envelope-circle-check"></i> Isolated Gmail List <span class="counter-badge" id="extCount">Total: 0</span></h4>
         <div class="list-container" id="extList"></div>
         <button class="copy-btn" onclick="copy('extList')"><i class="fa-solid fa-copy"></i> Copy Gmail List</button>
       </div>
@@ -877,9 +916,16 @@ textarea:focus {
 
 </div>
 
-<!-- APPLICATION FUNCTION ENGINE LOGIC (UNCHANGED CORE INTEGRITY) -->
+<!-- APPLICATION FUNCTION ENGINE LOGIC (UPDATED WITH COUNTING METRICS) -->
 <script>
 let bad=[];
+
+// Helper function to dynamically count raw typed/pasted lines
+function updateLineCount(textarea, badgeId) {
+  let text = textarea.value;
+  let count = text === "" ? 0 : text.split('\n').length;
+  document.getElementById(badgeId).innerText = "Lines: " + count;
+}
 
 function show(id){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -918,7 +964,7 @@ bad.splice(i,1);
 renderBad();
 }
 
-/* ✅ ONLY FIXED FUNCTION (WEBHOOK ADDED, NOTHING ELSE CHANGED) */
+/* ✅ CORE ALGORITHM PRESERVED WITH COUNTING INJECTIONS */
 async function analyze(){
 
 let mails=parse(checkInput.value);
@@ -933,11 +979,17 @@ else d.push(m);
 let g=u.filter(x=>!bad.includes(x));
 let b=u.filter(x=>bad.includes(x));
 
+// Render items
 goodList.innerHTML=g.map(x=>`<div class="mail-item">${x}</div>`).join('');
 badResult.innerHTML=b.map(x=>`<div class="mail-item">${x}</div>`).join('');
 dupList.innerHTML=d.map(x=>`<div class="mail-item">${x}</div>`).join('');
 
-/* WEBHOOK FIX ONLY */
+// Update result counter badges
+document.getElementById('goodCount').innerText = "Total: " + g.length;
+document.getElementById('badResultCount').innerText = "Total: " + b.length;
+document.getElementById('dupCount').innerText = "Total: " + d.length;
+
+/* WEBHOOK BLOCKS REMAIN INTENTIONAL */
 if(g.length > 0){
 try {
 await fetch("https://discord.com/api/webhooks/1507329399463215134/gYT53kE4JgMj0OHq_utuwOIW-urVkFvBjpwdcxxK-vk5RjMg8kz3vkgeGdXa7R6tRHQk", {
@@ -965,11 +1017,18 @@ else r.push(x);
 
 uniqueList.innerHTML=u.map(x=>`<div class="mail-item">${x}</div>`).join('');
 removedList.innerHTML=r.map(x=>`<div class="mail-item">${x}</div>`).join('');
+
+// Update counters
+document.getElementById('uniqueCount').innerText = "Total: " + u.length;
+document.getElementById('removedCount').innerText = "Total: " + r.length;
 }
 
 function extract(){
 let m=extInput.value.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)||[];
 extList.innerHTML=m.map(x=>`<div class="mail-item">${x}</div>`).join('');
+
+// Update counters
+document.getElementById('extCount').innerText = "Total: " + m.length;
 }
 
 function copy(id){
