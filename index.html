@@ -260,6 +260,36 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
 }
 
+/* Action row styling for action buttons and clear functionality */
+.action-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.clear-btn {
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition-smooth);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.clear-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--cyber-red);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 /* --- Buttons System --- */
 .main-btn {
   width: 100%;
@@ -604,10 +634,32 @@ textarea:focus {
     flex-direction: column;
     gap: 16px;
     text-align: center;
+    padding: 20px;
   }
   .tabs {
     width: 100%;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  .tab-btn {
+    width: 100%;
     justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px;
+  }
+  .contact {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  .contact a {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
   }
   .footer-grid {
     grid-template-columns: 1fr;
@@ -665,7 +717,10 @@ textarea:focus {
         <div class="textarea-wrapper">
           <textarea id="badInput" placeholder="Enter target strings or blacklisted addresses here..."></textarea>
         </div>
-        <button class="main-btn" onclick="saveBad()"><i class="fa-solid fa-floppy-disk"></i> Save Bad Mails</button>
+        <div class="action-row">
+          <button class="main-btn" onclick="saveBad()"><i class="fa-solid fa-floppy-disk"></i> Save Bad Mails</button>
+          <button class="clear-btn" onclick="document.getElementById('badInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+        </div>
         
         <div class="list-container" id="badList"></div>
         
@@ -678,7 +733,10 @@ textarea:focus {
         <div class="textarea-wrapper">
           <textarea id="checkInput" placeholder="Paste verification payload lists here..."></textarea>
         </div>
-        <button class="main-btn" onclick="analyze()"><i class="fa-solid fa-bolt"></i> ANALYZE NOW</button>
+        <div class="action-row">
+          <button class="main-btn" onclick="analyze()"><i class="fa-solid fa-bolt"></i> ANALYZE NOW</button>
+          <button class="clear-btn" onclick="document.getElementById('checkInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+        </div>
 
         <!-- Good Metric Output Box -->
         <div class="result-box good">
@@ -712,7 +770,10 @@ textarea:focus {
       <div class="textarea-wrapper">
         <textarea id="dupInput" placeholder="Paste mail matrix array to filter redundancies..."></textarea>
       </div>
-      <button class="main-btn" onclick="removeDup()"><i class="fa-solid fa-filter-circle-xmark"></i> Remove Duplicates</button>
+      <div class="action-row">
+        <button class="main-btn" onclick="removeDup()"><i class="fa-solid fa-filter-circle-xmark"></i> Remove Duplicates</button>
+        <button class="clear-btn" onclick="document.getElementById('dupInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+      </div>
 
       <div class="result-box good">
         <h4><i class="fa-solid fa-sparkles"></i> Unique Output</h4>
@@ -735,7 +796,10 @@ textarea:focus {
       <div class="textarea-wrapper">
         <textarea id="extInput" placeholder="Dump raw text strings or logs here to isolate target syntax patterns..."></textarea>
       </div>
-      <button class="main-btn" onclick="extract()"><i class="fa-solid fa-arrow-down-9-1"></i> Extract Elements</button>
+      <div class="action-row">
+        <button class="main-btn" onclick="extract()"><i class="fa-solid fa-arrow-down-9-1"></i> Extract Elements</button>
+        <button class="clear-btn" onclick="document.getElementById('extInput').value=''"><i class="fa-solid fa-eraser"></i> Clear</button>
+      </div>
 
       <div class="result-box good">
         <h4><i class="fa-solid fa-envelope-circle-check"></i> Isolated Gmail List</h4>
